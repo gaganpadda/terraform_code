@@ -126,12 +126,10 @@ resource "null_resource" "name" {
     type        = "ssh"
     user        = "ubuntu"
     private_key = file("C:/Users/padda/Downloads/jenkins-ec2.pem")
-    private_key = file("C:/Users/padda/Downloads/jenkins-ec2.pem")
     host        = aws_instance.jfrog-ec2_instance.public_ip
   }
 
   provisioner "file" {
-    source      = "C:/Users/padda/OneDrive/Desktop/Cloud_Computing/DevOps_Projects/Artifactory-installation/terraform_code/install_artifactory.sh"
     source      = "C:/Users/padda/OneDrive/Desktop/Cloud_Computing/DevOps_Projects/Artifactory-installation/terraform_code/install_artifactory.sh"
     destination = "/tmp/install_artifactory.sh"
   }

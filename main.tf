@@ -39,7 +39,7 @@ resource "aws_security_group" "jfrog-ec2_security_group" {
   description = "allow access on ports 8081, 8082 and 22"
   vpc_id      = aws_default_vpc.default_vpc.id
 
-  # allow access on port 9000
+  # allow access on port 8081 and 8082
   ingress {
     description = "http proxy access"
     from_port   = 8081
@@ -65,6 +65,30 @@ resource "aws_security_group" "jfrog-ec2_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+   ingress {
+    description = "http access"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+   ingress {
+    description = "https access"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+   ingress {
+    description = "PostgreSQL port"
+    from_port   = 5432    
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] 
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -86,7 +110,7 @@ resource "aws_instance" "jfrog-ec2_instance" {
   key_name               = "jenkins-ec2"
 
   root_block_device {
-    volume_size = 16
+    volume_size = 24
   }
 
   tags = {
@@ -102,13 +126,13 @@ resource "null_resource" "name" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("~/Downloads/jenkins-ec2.pem")
+    private_key = file("C:/Users/padda/Downloads/jenkins-ec2.pem")
     host        = aws_instance.jfrog-ec2_instance.public_ip
   }
 
   # copy the install_jenkins.sh file from your computer to the ec2 instance 
   provisioner "file" {
-    source      = "install_artifactory.sh"
+    source      = "C:/Users/padda/OneDrive/Desktop/Cloud_Computing/DevOps_Projects/Artifactory-installation/terraform_code/install_artifactory.sh"
     destination = "/tmp/install_artifactory.sh"
   }
 
